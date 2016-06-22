@@ -3,25 +3,6 @@
 class symbos_narrowform {
   
   protected $pt_v_notes = "";
-  protected $ofcr_names = array();
-  protected $ofcr_urls = array();
-  protected $ofcr_known = array();
-  
-  public function dofcr ( $rg_a, $rg_b, $rg_c )
-  {
-    if ( $this->ofcr_known[$rg_a] )
-    {
-      
-    }
-    $this->ofcr_names[$rg_a] = $rg_b;
-    $this->ofcr_urls[$rg_a] = $rg_c;
-    $this->ofcr_known[$rg_a] = true;
-  }
-  
-  public function ofcr ( $rg_a )
-  {
-    
-  }
   
   public function coreword ( $rg_a )
   {
