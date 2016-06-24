@@ -102,7 +102,7 @@ public function by_toc ( $rg_resloc, $rg_showerr ) {
 }
 
 
-function by_lectpage ( $rg_page, $rg_showerr ) {
+public function by_lectpage ( $rg_page, $rg_showerr ) {
   $sm = $this->rob_sm;
   if ( !(file_exists($rg_page)) )
   {

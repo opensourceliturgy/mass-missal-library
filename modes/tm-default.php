@@ -1,6 +1,9 @@
 <?
 
 $sn_mode_inf = array();
+
+$sn_mode_inf["style-season"] = 'default';
+
 $sn_mode_inf["bgcolor"] = "FFFAF0";
 $sn_mode_inf["textcolor"] = "000000";
 $sn_mode_inf["linkcolor"] = "000088";
@@ -46,5 +49,7 @@ $sn_mode_inf["bgimage_at"] = "";
 // will treat it (if it's a relative link) relative to the root
 // PHP page that it sees. Keep that in mind, too, if you dare
 // to use a background image.
+
+require_once ( $libdir . "/functions.php" );
 
 ?>
