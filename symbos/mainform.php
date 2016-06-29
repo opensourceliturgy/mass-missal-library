@@ -1,6 +1,7 @@
 <?php
 
 class symbos_mainform {
+  protected $v_cite = '';
   
   public function coreword ( $rg_a )
   {
@@ -9,6 +10,60 @@ class symbos_mainform {
     echo $rg_a;
     echo "</font>";
     echo "</p>\n";
+  }
+  
+  protected function ct_encode ( $ctext )
+  {
+    $sorca = $ctext;
+    $sorcb = str_replace('&','&amp;',$sorca); $sorca = $sorcb;
+    $sorcb = str_replace('<','\\&lt;',$sorca); $sorca = $sorcb;
+    $sorcb = str_replace('>','\\&gt;',$sorca); $sorca = $sorcb;
+    $sorcb = str_replace("'",'\\&#39;',$sorca); $sorca = $sorcb;
+    $sorcb = str_replace('"','\\&quot;',$sorca); $sorca = $sorcb;
+    return $sorca;
+  }
+  
+  public function cite ( $ctext )
+  {
+    $this->v_cite .= $this->ct_encode($ctext);
+  }
+  
+  public function nl_cite ( $ctext )
+  {
+    $this->v_cite .= '<br/>' . $this->ct_encode($ctext);
+  }
+  
+  public function lnk_cite ( $ctext, $urlo )
+  {
+    $this->v_cite .= '<a href = ' . $urlo . ' target = _blank >' . $this->ct_encode($ctext) . '</a>';
+  }
+  
+  public function ct_line ( $cnum )
+  {
+    $lcount = $cnum;
+    while ( $lcount > 0.5 )
+    {
+      $this->v_cite .= "<br/>";
+      $lcount = ((int)($lcount - 0.8));
+    }
+  }
+  
+  public function ct_link ( $rgray )
+  {
+    echo "\n<span class = \"cite_link\"><i>(<a href = \"javascript:CiteNote('" . $this->v_cite . "')\">" . '**' . "</a>)</i></span>\n";
+    $this->v_cite = '';
+  }
+  
+  public function cite_form ( )
+  {
+?>
+<p>
+In this HTML rendering, source references are in the form of small links
+labeled &quot;(**)&quot; that you click on to open a pop-up window with
+source information.
+For this to work, JavaScript must be enabled.
+</p>
+<?php
   }
   
   public function tx_cross ( )
