@@ -1,7 +1,5 @@
 <?
 
-require_once(realpath(__DIR__ . '/season/functions.php'));
-
 function set_pref ( $prfid, $prfval )
 {
   $GLOBALS['sn_mode_inf'][$prfid] = $prfval;

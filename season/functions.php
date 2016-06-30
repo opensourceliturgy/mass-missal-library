@@ -1,5 +1,11 @@
 <?
 
+// THIS CLASS IS SLATED FOR DEPRECATION - AND THE FILE ONLY KEPT HERE
+// UNTIL THE DECISION TO DO SO IS FINALIZED. IN THE MEAN TIME, A
+// FORBIDDEN-TO-USE CLAUSE IS INCLUDED IN THIS FILE AS THE NEXT
+// LINE THAT ISN'T COMMENTED-OUT.
+exit(25);
+
 // Only temporarily hardcoded. This will eventually change.
 date_default_timezone_set('America/New_York');
 
