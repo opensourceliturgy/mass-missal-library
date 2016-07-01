@@ -3,6 +3,16 @@
 protected $initio = false;
 protected $lgpath;
 protected $lgpack;
+protected $content = '';
+
+public function lrs_on ( ) {
+  ob_start();
+}
+
+public function lrs_off ( ) {
+  $this->content .= ob_get_contents();
+  ob_end_clean();
+}
 
 
 public function init ( $lgpath, $lgpack )
@@ -19,6 +29,7 @@ protected function ec_part ( $langinf, $partid ) {
   $lct = $GLOBALS['lct'];
   $strmagic = $GLOBALS['strmagic'];
   $credits = $GLOBALS['credits'];
+  $lngu = $GLOBALS['lngu'];
   
   
   $langray = $langinf['lst'];
@@ -31,6 +42,7 @@ protected function ec_part ( $langinf, $partid ) {
       $trgfile = $langresi . '/' . $partid . '.php';
       if ( file_exists($trgfile) )
       {
+        $this->content = '';
         return include realpath($trgfile);
       }
     }
@@ -43,6 +55,7 @@ public function part ( $partid )
   {
     $this->ec_part($eachlang,$partid);
   }
+  echo $this->content;
 }
 
 

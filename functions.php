@@ -21,6 +21,7 @@ function include_array_files ( $lc_raya )
   $lct = $GLOBALS['lct'];
   $strmagic = $GLOBALS['strmagic'];
   $credits = $GLOBALS['credits'];
+  $lngu = $GLOBALS['lngu'];
   
   foreach ( $lc_raya as $lc_pref )
   {
@@ -39,6 +40,7 @@ function include_path_file ( $thepath, $thefile, $lnginfo )
   $lct = $GLOBALS['lct'];
   $strmagic = $GLOBALS['strmagic'];
   $credits = $GLOBALS['credits'];
+  $lngu = $GLOBALS['lngu'];
   
   foreach ( $thepath as $thespot )
   {
