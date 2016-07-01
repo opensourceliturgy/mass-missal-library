@@ -15,6 +15,13 @@ function get_pref ( $prfid )
 
 function include_array_files ( $lc_raya )
 {
+  // Let us import certain global objects into the
+  // local var-space.
+  $sm = $GLOBALS['sm'];
+  $lct = $GLOBALS['lct'];
+  $strmagic = $GLOBALS['strmagic'];
+  $credits = $GLOBALS['credits'];
+  
   foreach ( $lc_raya as $lc_pref )
   {
     if ( file_exists($lc_pref) )
@@ -26,6 +33,13 @@ function include_array_files ( $lc_raya )
 
 function include_path_file ( $thepath, $thefile, $lnginfo )
 {
+  // Let us import certain global objects into the
+  // local var-space.
+  $sm = $GLOBALS['sm'];
+  $lct = $GLOBALS['lct'];
+  $strmagic = $GLOBALS['strmagic'];
+  $credits = $GLOBALS['credits'];
+  
   foreach ( $thepath as $thespot )
   {
     $theone = $thepath . '/' . $thefile;
