@@ -3,16 +3,7 @@
 protected $initio = false;
 protected $lgpath;
 protected $lgpack;
-protected $content = '';
-
-public function lrs_on ( ) {
-  ob_start();
-}
-
-public function lrs_off ( ) {
-  $this->content .= ob_get_contents();
-  ob_end_clean();
-}
+protected $worked;
 
 
 public function init ( $lgpath, $lgpack )
@@ -42,7 +33,7 @@ protected function ec_part ( $langinf, $partid ) {
       $trgfile = $langresi . '/' . $partid . '.php';
       if ( file_exists($trgfile) )
       {
-        $this->content = '';
+        $this->worked = false;
         return include realpath($trgfile);
       }
     }
@@ -51,11 +42,12 @@ protected function ec_part ( $langinf, $partid ) {
 
 public function part ( $partid )
 {
+  $this->worked = true;
   foreach ( $this->lgpath as $eachlang )
   {
     $this->ec_part($eachlang,$partid);
   }
-  echo $this->content;
+  return $this->worked;
 }
 
 
