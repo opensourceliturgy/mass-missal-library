@@ -60,6 +60,9 @@ protected function prv_prg_set ( $rg_a, $rg_b )
 }
 
 
+// $this->by_toc()
+// This is the function actually called by the main liturgy program
+// when it is time for the readings.
 public function by_toc ( $rg_resloc, $rg_showerr ) {
   if ( $this->unprepared() ) { return; }
   
