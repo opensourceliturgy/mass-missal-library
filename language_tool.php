@@ -4,8 +4,16 @@ protected $initio = false;
 protected $lgpath;
 protected $lgpack;
 protected $worked;
+protected $stacky = array();
 
-
+// The following function will only work once - and should
+// be called right after the object is created.
+// It simply sets the $lgpath variable (the multi-level array
+// that controls the sequence by which various languages are
+// checked) and the $lgpack variable (the multi-level array
+// that identifies where the various language modules are for
+// each language - as the same language may have different
+// modules for different ways of using the language).
 public function init ( $lgpath, $lgpack )
 {
   if ( $this->initio ) { return; }
@@ -14,14 +22,6 @@ public function init ( $lgpath, $lgpack )
 }
 
 protected function ec_part ( $langinf, $partid ) {
-  // Let us import certain global objects into the
-  // local var-space.
-  $sm = $GLOBALS['sm'];
-  $lct = $GLOBALS['lct'];
-  $strmagic = $GLOBALS['strmagic'];
-  $credits = $GLOBALS['credits'];
-  $lngu = $GLOBALS['lngu'];
-  
   
   $langray = $langinf['lst'];
   foreach ( $langray as $onelang )
@@ -34,19 +34,26 @@ protected function ec_part ( $langinf, $partid ) {
       if ( file_exists($trgfile) )
       {
         $this->worked = false;
-        return include realpath($trgfile);
+        $this->stacky = array (
+          'lang' => $langids,
+          'pack' => $langresi,
+        );
+        return include_with_obj($trgfile);
       }
     }
   }
 }
 
+// This function attempts to use the 
 public function part ( $partid )
 {
+  $stacky = $this->stacky;
   $this->worked = true;
   foreach ( $this->lgpath as $eachlang )
   {
     $this->ec_part($eachlang,$partid);
   }
+  $this->stacky = $stacky;
   return $this->worked;
 }
 
