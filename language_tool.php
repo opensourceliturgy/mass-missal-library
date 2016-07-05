@@ -4,6 +4,8 @@ protected $initio = false;
 protected $lgpath;
 protected $lgpack;
 protected $stacky = false;
+protected $framing = false;
+protected $fram_set = false;
 
 // The following function will only work once - and should
 // be called right after the object is created.
@@ -18,6 +20,18 @@ public function init ( $lgpath, $lgpack )
   if ( $this->initio ) { return; }
   $this->lgpath = $lgpath;
   $this->lgpack = $lgpack;
+}
+
+public function set_framing ( $framray )
+{
+  if ( $this->fram_set ) { return; }
+  $this->framing = $framray;
+}
+
+protected function get_framing ( $param )
+{
+  if ( !is_array($this->framing) ) { return ''; }
+  if ( !array_key_exists($param,$this->framing) ) { return ''; }
 }
 
 // This function is a protected subsidiary of the public

@@ -34,6 +34,7 @@ function include_with_obj ( $thefile )
   $strmagic = $GLOBALS['strmagic'];
   $credits = $GLOBALS['credits'];
   $lngu = $GLOBALS['lngu'];
+  $ttlng = $GLOBALS['ttlng'];
   
   return include realpath($thefile);
 }
