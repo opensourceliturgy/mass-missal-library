@@ -68,15 +68,13 @@ For this to work, JavaScript must be enabled.
   
   public function tx_cross ( )
   {
-    $lc_rt = "<font color = \"";
-    $lc_rt .= $GLOBALS["sn_mode_inf"]["red_color"];
-    $lc_rt .= "\" size = \"+3\">&#10016;</font>";
+    $lc_rt = '<span class = "highlight_big">&#10016;</span>';
     return $lc_rt;
   }
   
   public function cross ( )
   {
-    ?><font color = "#<?php echo $GLOBALS["sn_mode_inf"]["red_color"] ?>" size = "+3">&#10016;</font><?php
+    ?><span class = "highlight_big">&#10016;</span><?php
   }
   
   public function flushnotes ( )
@@ -125,7 +123,7 @@ For this to work, JavaScript must be enabled.
   
   public function mcross ( )
   {
-    ?><font color = "#<?php echo $GLOBALS["sn_mode_inf"]["red_color"] ?>">&#10016;</font><?php
+    ?><span class = "highlight_reg">&#10016;</span><?php
   }
   
   public function note ( $rg_a )

@@ -109,13 +109,7 @@ public function get_prmx ( ) {
 // segment will be used.)
 public function part ( $partid )
 {
-  $this->stack_on();
-  $this->stacky['failed'] = true;
-  foreach ( $this->lgpath as $eachlang )
-  {
-    $this->ec_part($eachlang,$partid);
-  }
-  return $this->stack_off();
+  return $this->part_prm($partid,false);
 }
 public function part_prm ( $partid,$param )
 {
