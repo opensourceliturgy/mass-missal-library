@@ -171,6 +171,12 @@ public function by_lectpage ( $rg_page, $rg_showerr ) {
       $isee = true;
     }
     
+    if ( $base == "catfile" )
+    {
+      echo file_get_contents(realpath(dirname(realpath($rg_page)) . '/' . $allrg));
+      $isee = true;
+    }
+    
     if ( $base == "part" )
     {
       $this->prv_part($allrg,$rg_showerr);

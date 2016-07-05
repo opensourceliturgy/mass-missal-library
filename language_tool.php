@@ -61,6 +61,34 @@ protected function stack_off ( ) {
   return $retval;
 }
 
+// If the language-template was invoked by a function
+// that sends parameters, this function can retrieve
+// a single parameter.
+//   Upon failure, this function returns the alternate
+// value specified in it's second argument.
+public function get_pram ( $target, $altern ) {
+  $theray = $this->get_prmx;
+  if ( !array_key_exists($target,$theray) ) { return $altern; }
+  return $theray[$target];
+}
+
+// If the language-template was invoked by a function
+// that sends parameters, this function can retrieve
+// the array of parameters.
+//   Upon failure, this function returns an empty
+// array.
+//   It is implemented as a public function rather than
+// as a protected utility of get_pram() just in case one
+// language res-file needs to fetch this array in order
+// to pass it to another.
+public function get_prmx ( ) {
+  if ( !is_array($this->stacky) ) { return array(); }
+  if ( !array_key_exists('params',$this->stacky) ) { return array(); }
+  $raykey = $this->stacky['params'];
+  if ( is_array($raykey) ) { return $raykey; }
+  return array();
+}
+
 // This function attempts to find somewhere in the
 // language search path the segment identified in
 // the one argument provided - and invokes it if
@@ -83,6 +111,17 @@ public function part ( $partid )
 {
   $this->stack_on();
   $this->stacky['failed'] = true;
+  foreach ( $this->lgpath as $eachlang )
+  {
+    $this->ec_part($eachlang,$partid);
+  }
+  return $this->stack_off();
+}
+public function part_prm ( $partid,$param )
+{
+  $this->stack_on();
+  $this->stacky['failed'] = true;
+  $this->stacky['params'] = $param;
   foreach ( $this->lgpath as $eachlang )
   {
     $this->ec_part($eachlang,$partid);
@@ -121,6 +160,53 @@ public function part ( $partid )
 // FUNCTION INCOMPLETE:
 public function subpart ( $partid )
 {
+  return subpart_prm ( $partid, false );
+}
+public function subpart_prm ( $partid, $param )
+{
+  # Of course -- if there is no stack,
+  # then ne'ermind:
+  if ( !is_array($this->stacky) ) { return $this->part_prm($partid,$param); }
+  
+  $this->stack_on();
+  $this->stacky['failed'] = true;
+  $this->stacky['params'] = $param;
+  $orimodule = $this->stacky['prv']['module'];
+  $orilang = $this->stacky['prv']['lang'];
+  $this->stacky['module'] = $this->stacky['prv']['module'];
+  $this->stacky['lang'] = $this->stacky['prv']['lang'];
+  $this->stacky['group'] = $this->stacky['prv']['group'];
+  
+  # First, we try to get it within the module:
+  $fila = $orimodule . '/' . $partid . '.php';
+  if ( file_exists($fila) )
+  {
+    $this->stacky['failed'] = false;
+    include_with_obj($fila);
+    return $this->stack_off();
+  }
+  
+  # Then, we try to get it by the language:
+  $langids = $this->stacky['lang'];
+  $langresx = $this->lgpack[$langids];
+  foreach ( $langresx as $langresi )
+  {
+    $this->stacky['module'] = $langresx;
+    $trgfile = $langresi . '/' . $partid . '.php';
+    if ( file_exists($trgfile) )
+    {
+      $this->stacky['failed'] = false;
+      $retval = include_with_obj($trgfile);
+      return $this->stack_off();
+    }
+  }
+  
+  # Finally, we get it anywhere we can.
+  foreach ( $this->lgpath as $eachlang )
+  {
+    $this->ec_part($eachlang,$partid);
+  }
+  return $this->stack_off();
 }
 
 
