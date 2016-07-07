@@ -22,17 +22,18 @@ public function init ( $lgpath, $lgpack )
   $this->lgpack = $lgpack;
 }
 
+
 public function set_framing ( $framray )
 {
   if ( $this->fram_set ) { return; }
   $this->framing = $framray;
 }
-
 protected function get_framing ( $param )
 {
   if ( !is_array($this->framing) ) { return ''; }
   if ( !array_key_exists($param,$this->framing) ) { return ''; }
 }
+
 
 // This function is a protected subsidiary of the public
 // $this->part() function. It is called once per
@@ -65,6 +66,32 @@ protected function stack_on ( ) {
     'prv' => $oldstack,
     'stacky' => true,
   );
+  
+  
+  // The following litany is needed to assure that
+  // the class-list is avialable (so that, for example,
+  // alternate titles may show up with the primary one
+  // distinct form all others)
+  $classls = $this->get_framing('class_list');
+  if ( !is_array($classls) ) { $classls = array('one','two','three'); }
+  if ( count($classls) < 0.5 ) { $classls = array('one','two','three'); }
+  if ( count($classls) < 1.5 )
+  {
+    $ziga = $classls[0];
+    $classls = array($ziga,$ziga);
+  }
+  $this->stacky['classls'] = $classls;
+}
+
+public function get_seq_cls ( ) {
+  return $this->stacky['classcur'];
+}
+
+protected function shift_seq_cls ( )
+{
+  $lastone = array_pop($this->stacky['classls']);
+  array_push($this->stacky['classls'],$lastone,$lastone);
+  $this->stacky['classcur'] = array_shift($this->stacky['classls']);
 }
 
 protected function stack_off ( ) {
@@ -215,6 +242,72 @@ public function subpart_prm ( $partid, $param )
     $this->ec_part($eachlang,$partid);
   }
   return $this->stack_off();
+}
+
+
+
+public function lngpart ( $orilang, $partid )
+{
+  return lngpart_prm ( $orilang, $partid, false );
+}
+public function lngpart_prm ( $orilang, $partid, $param )
+{
+  $this->stack_on();
+  $this->stacky['failed'] = true;
+  $this->stacky['params'] = $param;
+  $this->stacky['lang'] = $orilang;
+  
+  //$this->stacky['group'] = $this->stacky['prv']['group'];
+  // As the language here is furnished rather than derived
+  // from the stack, the current practice of this function
+  // is to generate a temporary goup that includes just
+  // this language --- though in the future, a search may
+  // be implemented to find an existing group that already
+  // includes this language.
+  $this->stacky['group'] = array( // $langinf
+    'lst' => array ( // $langray
+      array( // $onelang
+        'lang' => $orilang // $langids
+      )
+    )
+  );
+  
+  
+  # Then, we try to get it by the language:
+  $langids = $this->stacky['lang'];
+  $langresx = $this->lgpack[$langids];
+  foreach ( $langresx as $langresi )
+  {
+    $this->stacky['module'] = $langresx;
+    $trgfile = $langresi . '/' . $partid . '.php';
+    if ( file_exists($trgfile) )
+    {
+      $this->stacky['failed'] = false;
+      $retval = include_with_obj($trgfile);
+      return $this->stack_off();
+    }
+  }
+  
+  # Finally, we get it anywhere we can.
+  foreach ( $this->lgpath as $eachlang )
+  {
+    $this->ec_part($eachlang,$partid);
+  }
+  return $this->stack_off();
+}
+
+// Sometimes, of course, a language-resource from one
+// language-category must retrieve the language from
+// it's own language-category's language_tool object
+// to pass it to another language-category's language-tool
+// object. 
+public function getlng ( )
+{
+  # Of course -- if there is no stack,
+  # then ne'ermind:
+  if ( !is_array($this->stacky) ) { return ''; }
+  
+  return $this->stacky['lang'];
 }
 
 
