@@ -54,10 +54,11 @@ protected function ec_part ( $langinf, $partid ) {
       {
         $this->stacky['failed'] = false;
         $retval = include_with_obj($trgfile);
-        return $retval;
+        return array('ret' => $retval, 'fail' => false);
       }
     }
   }
+  return array('fail' => true);
 }
 
 protected function stack_on ( ) {
@@ -154,14 +155,17 @@ public function part ( $partid )
 }
 public function part_prm ( $partid,$param )
 {
+  $failure = true;
   $this->stack_on();
   $this->stacky['failed'] = true;
   $this->stacky['params'] = $param;
   foreach ( $this->lgpath as $eachlang )
   {
-    $this->ec_part($eachlang,$partid);
+    $retval = $this->ec_part($eachlang,$partid);
+    if ( !$retval['fail'] ) { $failure = false; }
   }
-  return $this->stack_off();
+  $this->stack_off();
+  return $failure;
 }
 
 
